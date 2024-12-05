@@ -1,23 +1,31 @@
 package cz.sda.java.remotesk1.invoices.service;
 
+import cz.sda.java.remotesk1.invoices.controller.request.UpdateClient;
 import cz.sda.java.remotesk1.invoices.model.Client;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
+@Slf4j
 @Service
 class ClientServiceBean implements ClientService {
 
     private final Map<String, Client> clients = new HashMap<>();
 
     @Override
-    public void addClient(Client client) {
+    public Client addClient(String name, String address) {
+        var client = new Client(UUID.randomUUID().toString(), name, address);
         if (clients.containsKey(client.id())) {
             throw new IllegalArgumentException("Client with id " + client.id() + " already exists");
         }
         clients.put(client.id(), client);
+        log.info("Client added: {}", client);
+        return client;
     }
 
     @Override
@@ -26,6 +34,7 @@ class ClientServiceBean implements ClientService {
             throw new IllegalArgumentException("Client with id " + id + " does not exist");
         }
         clients.remove(id);
+        log.info("Client removed: {}", id);
     }
 
     @Override
@@ -37,11 +46,26 @@ class ClientServiceBean implements ClientService {
     }
 
     @Override
-    public void updateClient(Client client) {
-        if (!clients.containsKey(client.id())) {
-            throw new IllegalArgumentException("Client with id " + client.id() + " does not exist");
+    public Client updateClient(String id, UpdateClient updateClient) {
+        if (!clients.containsKey(id)) {
+            throw new IllegalArgumentException("Client with id " + id + " does not exist");
         }
-        clients.put(client.id(), client);
+        var client = clients.get(id);
+        var builder = Client.builder().id(id);
+        if (StringUtils.hasText(updateClient.name())) {
+            builder.name(updateClient.name());
+        } else {
+            builder.name(client.name());
+        }
+        if (StringUtils.hasText(updateClient.address())) {
+            builder.address(updateClient.address());
+        } else {
+            builder.address(client.address());
+        }
+        var updated = builder.build();
+        clients.put(id, updated);
+        log.info("Client updated: {}", updated);
+        return updated;
     }
 
     @Override

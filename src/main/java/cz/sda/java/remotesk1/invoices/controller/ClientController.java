@@ -1,11 +1,15 @@
 package cz.sda.java.remotesk1.invoices.controller;
 
+import cz.sda.java.remotesk1.invoices.controller.request.CreateClient;
+import cz.sda.java.remotesk1.invoices.controller.request.UpdateClient;
 import cz.sda.java.remotesk1.invoices.model.Client;
 import cz.sda.java.remotesk1.invoices.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -20,8 +24,9 @@ class ClientController {
     }
 
     @PostMapping("/")
-    void addClient(Client client) {
-        clientService.addClient(client);
+    ResponseEntity<Client> addClient(@RequestBody CreateClient client) {
+        Client created = clientService.addClient(client.name(), client.address());
+        return ResponseEntity.created(URI.create("/clients/" + created.id())).body(created);
     }
 
     @GetMapping("/")
@@ -35,13 +40,15 @@ class ClientController {
     }
 
     @DeleteMapping("/{id}")
-    void removeClient(@PathVariable("id") String id) {
+    ResponseEntity<Object> removeClient(@PathVariable("id") String id) {
         clientService.removeClient(id);
+        return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/{id}")
-    void updateClient(@PathVariable("id") String id, Client client) {
-        clientService.updateClient(client);
+    @PatchMapping("/{id}")
+    ResponseEntity<Client> updateClient(@PathVariable("id") String id, @RequestBody UpdateClient client) {
+        var updated = clientService.updateClient(id, client);
+        return ResponseEntity.ok(updated);
     }
 
 }

@@ -1,13 +1,14 @@
 package cz.sda.java.remotesk1.invoices.service;
 
+import cz.sda.java.remotesk1.invoices.controller.request.UpdateClient;
 import cz.sda.java.remotesk1.invoices.model.Client;
 
 import java.util.List;
 
 public interface ClientService {
-    void addClient(Client client);
+    Client addClient(String name, String address);
     void removeClient(String id);
     Client getClient(String id);
-    void updateClient(Client client);
+    Client updateClient(String id, UpdateClient client);
     List<Client> getAllClients();
 }
