@@ -2,8 +2,10 @@ package cz.sda.java.remotesk1.invoices.controller;
 
 import cz.sda.java.remotesk1.invoices.controller.request.CreateClient;
 import cz.sda.java.remotesk1.invoices.controller.request.UpdateClient;
+import cz.sda.java.remotesk1.invoices.exception.NotFoundException;
 import cz.sda.java.remotesk1.invoices.model.Client;
 import cz.sda.java.remotesk1.invoices.service.ClientService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/clients")
 class ClientController {
@@ -51,4 +54,15 @@ class ClientController {
         return ResponseEntity.ok(updated);
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException e) {
+        log.debug("Client not found", e);
+        return ResponseEntity.badRequest().build();
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    ResponseEntity<String> handleNotFoundException(NotFoundException e) {
+        log.debug("Client not found", e);
+        return ResponseEntity.notFound().build();
+    }
 }

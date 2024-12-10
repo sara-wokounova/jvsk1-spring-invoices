@@ -1,6 +1,7 @@
 package cz.sda.java.remotesk1.invoices.service;
 
 import cz.sda.java.remotesk1.invoices.controller.request.UpdateClient;
+import cz.sda.java.remotesk1.invoices.exception.NotFoundException;
 import cz.sda.java.remotesk1.invoices.model.Client;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,12 @@ class ClientServiceBean implements ClientService {
 
     @Override
     public Client addClient(String name, String address) {
+        if (!StringUtils.hasText(name)) {
+            throw new IllegalArgumentException("Name must not be empty");
+        }
+        if (!StringUtils.hasText(address)) {
+            throw new IllegalArgumentException("Address must not be empty");
+        }
         var client = new Client(UUID.randomUUID().toString(), name, address);
         if (clients.containsKey(client.id())) {
             throw new IllegalArgumentException("Client with id " + client.id() + " already exists");
@@ -31,7 +38,7 @@ class ClientServiceBean implements ClientService {
     @Override
     public void removeClient(String id) {
         if (!clients.containsKey(id)) {
-            throw new IllegalArgumentException("Client with id " + id + " does not exist");
+            throw new NotFoundException("Client with id " + id + " does not exist");
         }
         clients.remove(id);
         log.info("Client removed: {}", id);
@@ -40,7 +47,7 @@ class ClientServiceBean implements ClientService {
     @Override
     public Client getClient(String id) {
         if (!clients.containsKey(id)) {
-            throw new IllegalArgumentException("Client with id " + id + " does not exist");
+            throw new NotFoundException("Client with id " + id + " does not exist");
         }
         return clients.get(id);
     }
@@ -48,7 +55,7 @@ class ClientServiceBean implements ClientService {
     @Override
     public Client updateClient(String id, UpdateClient updateClient) {
         if (!clients.containsKey(id)) {
-            throw new IllegalArgumentException("Client with id " + id + " does not exist");
+            throw new NotFoundException("Client with id " + id + " does not exist");
         }
         var client = clients.get(id);
         var builder = Client.builder().id(id);
