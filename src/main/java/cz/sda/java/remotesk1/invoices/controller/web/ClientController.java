@@ -1,12 +1,14 @@
 package cz.sda.java.remotesk1.invoices.controller.web;
 
+import cz.sda.java.remotesk1.invoices.controller.web.request.UpdateClient;
 import cz.sda.java.remotesk1.invoices.model.Client;
-import cz.sda.java.remotesk1.invoices.model.UpdateClient;
 import cz.sda.java.remotesk1.invoices.service.ClientService;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -47,8 +49,17 @@ class ClientController {
     }
 
     @PostMapping("/update/{id}")
-    String updateUser(@PathVariable String id, UpdateClient client, Model model) {
-        clientService.updateClient(id, client);
+    String updateUser(@PathVariable String id, @Valid UpdateClient client, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            client.setId(id);
+            model.addAttribute("client", client);
+            return "edit-client";
+        }
+
+        clientService.updateClient(client.getId(), Client.builder()
+            .name(client.getName())
+            .address(client.getAddress())
+            .build());
         return "redirect:/clients/";
     }
 

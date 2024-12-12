@@ -8,8 +8,12 @@
 <h2>Clients</h2>
 <h3>Edit existing client</h3>
 <form action="#" th:action="@{/clients/update/{id}(id=${client.id})}" th:object="${client}" method="post">
-    <p>Name: <input type="text" th:field="*{name}" /></p>
-    <p>Address: <input type="text" th:field="*{address}" /></p>
+    <p>Name: <input type="text" th:field="*{name}" />
+        <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+    </p>
+    <p>Address: <input type="text" th:field="*{address}" />
+        <span th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></span>
+    </p>
     <p><button type="submit">Add</button></p>
 </form>
 </body>

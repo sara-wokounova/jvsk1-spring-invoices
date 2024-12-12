@@ -1,6 +1,6 @@
 package cz.sda.java.remotesk1.invoices.service;
 
-import cz.sda.java.remotesk1.invoices.model.UpdateClient;
+import cz.sda.java.remotesk1.invoices.controller.rest.request.UpdateClient;
 import cz.sda.java.remotesk1.invoices.exception.NotFoundException;
 import cz.sda.java.remotesk1.invoices.model.Client;
 import lombok.extern.slf4j.Slf4j;
@@ -53,7 +53,7 @@ class ClientServiceBean implements ClientService {
     }
 
     @Override
-    public Client updateClient(String id, UpdateClient updateClient) {
+    public Client updateClient(String id, Client updateClient) {
         if (!clients.containsKey(id)) {
             throw new NotFoundException("Client with id " + id + " does not exist");
         }
