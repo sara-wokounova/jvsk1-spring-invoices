@@ -1,7 +1,7 @@
 package cz.sda.java.remotesk1.invoices.controller.rest;
 
 import cz.sda.java.remotesk1.invoices.controller.rest.request.CreateClient;
-import cz.sda.java.remotesk1.invoices.controller.rest.request.UpdateClient;
+import cz.sda.java.remotesk1.invoices.model.UpdateClient;
 import cz.sda.java.remotesk1.invoices.exception.NotFoundException;
 import cz.sda.java.remotesk1.invoices.model.Client;
 import cz.sda.java.remotesk1.invoices.service.ClientService;

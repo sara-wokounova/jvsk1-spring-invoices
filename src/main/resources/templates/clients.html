@@ -6,6 +6,13 @@
 </head>
 <body>
 <h2>Clients</h2>
+<h3>Add new client</h3>
+<form action="#" th:action="@{/clients/add}" th:object="${client}" method="post">
+    <p>Name: <input type="text" th:field="*{name}" /></p>
+    <p>Address: <input type="text" th:field="*{address}" /></p>
+    <p><button type="submit">Add</button></p>
+</form>
+
 <div th:switch="${#lists.size(clients)}">
   <p th:case="0">No clients</p>
   <div th:case="*">
@@ -15,6 +22,8 @@
         <tr th:each="client : ${clients}">
           <td th:text="${client.name}">Name</td>
           <td th:text="${client.address}">Address</td>
+          <td><a th:href="@{/clients/edit/{id}(id=${client.id})}">Edit</a></td>
+          <td><a th:href="@{/clients/delete/{id}(id=${client.id})}">Delete</a></td>
         </tr>
     </table>
 
