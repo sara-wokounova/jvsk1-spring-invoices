@@ -1,6 +1,6 @@
 package cz.sda.java.remotesk1.invoices.service;
 
-import cz.sda.java.remotesk1.invoices.controller.request.UpdateClient;
+import cz.sda.java.remotesk1.invoices.controller.rest.request.UpdateClient;
 import cz.sda.java.remotesk1.invoices.model.Client;
 
 import java.util.List;

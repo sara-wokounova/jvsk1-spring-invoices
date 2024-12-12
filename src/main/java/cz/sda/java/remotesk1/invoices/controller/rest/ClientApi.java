@@ -1,7 +1,7 @@
-package cz.sda.java.remotesk1.invoices.controller;
+package cz.sda.java.remotesk1.invoices.controller.rest;
 
-import cz.sda.java.remotesk1.invoices.controller.request.CreateClient;
-import cz.sda.java.remotesk1.invoices.controller.request.UpdateClient;
+import cz.sda.java.remotesk1.invoices.controller.rest.request.CreateClient;
+import cz.sda.java.remotesk1.invoices.controller.rest.request.UpdateClient;
 import cz.sda.java.remotesk1.invoices.exception.NotFoundException;
 import cz.sda.java.remotesk1.invoices.model.Client;
 import cz.sda.java.remotesk1.invoices.service.ClientService;
@@ -16,13 +16,13 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/clients")
-class ClientController {
+@RequestMapping("/rest/clients")
+class ClientApi {
 
     private final ClientService clientService;
 
     @Autowired
-    ClientController(ClientService clientService) {
+    ClientApi(ClientService clientService) {
         this.clientService = clientService;
     }
 

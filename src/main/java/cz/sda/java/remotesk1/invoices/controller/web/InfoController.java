@@ -1,12 +1,13 @@
-package cz.sda.java.remotesk1.invoices.controller;
+package cz.sda.java.remotesk1.invoices.controller.web;
 
 import cz.sda.java.remotesk1.invoices.service.InfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+@Controller
 class InfoController {
 
     private final InfoService infoService;
@@ -17,7 +18,8 @@ class InfoController {
     }
 
     @GetMapping("/info")
-    String info() {
-        return infoService.getInfo();
+    String info(Model model) {
+        model.addAttribute("info", infoService.getInfo());
+        return "info";
     }
 }

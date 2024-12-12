@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Clients</title>
+</head>
+<body>
+<h2>Clients</h2>
+<div th:switch="${#lists.size(clients)}">
+  <p th:case="0">No clients</p>
+  <div th:case="*">
+    <table>
+      <thead><tr><th>Name</th><th>Address</th></tr></thead>
+      <tbody>
+        <tr th:each="client : ${clients}">
+          <td th:text="${client.name}">Name</td>
+          <td th:text="${client.address}">Address</td>
+        </tr>
+    </table>
+
+  </div>
+
+</div>
+</body>
+</html>
