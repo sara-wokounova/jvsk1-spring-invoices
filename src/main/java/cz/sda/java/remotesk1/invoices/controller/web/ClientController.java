@@ -44,7 +44,7 @@ class ClientController {
 
     @GetMapping("/edit/{id}")
     String updateUser(@PathVariable String id, Model model) {
-        model.addAttribute("client", clientService.getClient(id));
+        model.addAttribute("updateClient", clientService.getClient(id));
         return "edit-client";
     }
 
@@ -52,7 +52,7 @@ class ClientController {
     String updateUser(@PathVariable String id, @Valid UpdateClient client, BindingResult result, Model model) {
         if (result.hasErrors()) {
             client.setId(id);
-            model.addAttribute("client", client);
+            model.addAttribute("updateClient", client);
             return "edit-client";
         }
 
