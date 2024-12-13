@@ -1,22 +1,27 @@
 package cz.sda.java.remotesk1.invoices.service;
 
-import cz.sda.java.remotesk1.invoices.controller.rest.request.UpdateClient;
 import cz.sda.java.remotesk1.invoices.exception.NotFoundException;
 import cz.sda.java.remotesk1.invoices.model.Client;
+import cz.sda.java.remotesk1.invoices.repository.ClientRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
+import java.util.stream.StreamSupport;
 
 @Slf4j
 @Service
 class ClientServiceBean implements ClientService {
 
-    private final Map<String, Client> clients = new HashMap<>();
+    private final ClientRepository clientRepository;
+
+    @Autowired
+    ClientServiceBean(ClientRepository clientRepository) {
+        this.clientRepository = clientRepository;
+    }
 
     @Override
     public Client addClient(String name, String address) {
@@ -27,56 +32,54 @@ class ClientServiceBean implements ClientService {
             throw new IllegalArgumentException("Address must not be empty");
         }
         var client = new Client(UUID.randomUUID().toString(), name, address);
-        if (clients.containsKey(client.id())) {
-            throw new IllegalArgumentException("Client with id " + client.id() + " already exists");
+        if (clientRepository.existsById(client.getId())) {
+            throw new IllegalArgumentException("Client with id " + client.getId() + " already exists");
         }
-        clients.put(client.id(), client);
+        clientRepository.save(client);
         log.info("Client added: {}", client);
         return client;
     }
 
     @Override
     public void removeClient(String id) {
-        if (!clients.containsKey(id)) {
+        if (!clientRepository.existsById(id)) {
             throw new NotFoundException("Client with id " + id + " does not exist");
         }
-        clients.remove(id);
+        clientRepository.deleteById(id);
         log.info("Client removed: {}", id);
     }
 
     @Override
     public Client getClient(String id) {
-        if (!clients.containsKey(id)) {
-            throw new NotFoundException("Client with id " + id + " does not exist");
-        }
-        return clients.get(id);
+        return clientRepository
+                .findById(id)
+                .orElseThrow(() -> new NotFoundException("Client with id " + id + " does not exist"));
     }
 
     @Override
     public Client updateClient(String id, Client updateClient) {
-        if (!clients.containsKey(id)) {
-            throw new NotFoundException("Client with id " + id + " does not exist");
-        }
-        var client = clients.get(id);
-        var builder = Client.builder().id(id);
-        if (StringUtils.hasText(updateClient.name())) {
-            builder.name(updateClient.name());
+
+        var client = clientRepository
+                .findById(id)
+                .orElseThrow(() -> new NotFoundException("Client with id " + id + " does not exist"));
+        var updated = new Client();
+        if (StringUtils.hasText(updateClient.getName())) {
+            updated.setName(updateClient.getName());
         } else {
-            builder.name(client.name());
+            updated.setName(client.getName());
         }
-        if (StringUtils.hasText(updateClient.address())) {
-            builder.address(updateClient.address());
+        if (StringUtils.hasText(updateClient.getAddress())) {
+            updated.setAddress(updateClient.getAddress());
         } else {
-            builder.address(client.address());
+            updated.setAddress(client.getAddress());
         }
-        var updated = builder.build();
-        clients.put(id, updated);
+        clientRepository.save(updated);
         log.info("Client updated: {}", updated);
         return updated;
     }
 
     @Override
     public List<Client> getAllClients() {
-        return List.of(clients.values().toArray(new Client[0]));
+        return StreamSupport.stream(clientRepository.findAll().spliterator(), false).toList();
     }
 }

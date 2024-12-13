@@ -26,13 +26,13 @@ class ClientController {
     @GetMapping("/")
     String getAllClients(Model model) {
         model.addAttribute("clients", clientService.getAllClients());
-        model.addAttribute("client", Client.builder().build());
+        model.addAttribute("client", new Client());
         return "clients";
     }
 
     @PostMapping("/add")
     String addUser(Client client, Model model) {
-        clientService.addClient(client.name(), client.address());
+        clientService.addClient(client.getName(), client.getAddress());
         return "redirect:/clients/";
     }
 
@@ -56,10 +56,7 @@ class ClientController {
             return "edit-client";
         }
 
-        clientService.updateClient(client.getId(), Client.builder()
-            .name(client.getName())
-            .address(client.getAddress())
-            .build());
+        clientService.updateClient(client.getId(), new Client(client.getId(), client.getName(), client.getAddress()));
         return "redirect:/clients/";
     }
 

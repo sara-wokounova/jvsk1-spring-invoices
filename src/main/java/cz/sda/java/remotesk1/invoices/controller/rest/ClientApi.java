@@ -29,7 +29,7 @@ class ClientApi {
     @PostMapping("/")
     ResponseEntity<Client> addClient(@RequestBody CreateClient client) {
         Client created = clientService.addClient(client.name(), client.address());
-        return ResponseEntity.created(URI.create("/clients/" + created.id())).body(created);
+        return ResponseEntity.created(URI.create("/clients/" + created.getId())).body(created);
     }
 
     @GetMapping("/")
@@ -50,10 +50,7 @@ class ClientApi {
 
     @PatchMapping("/{id}")
     ResponseEntity<Client> updateClient(@PathVariable("id") String id, @RequestBody UpdateClient client) {
-        var updated = clientService.updateClient(id, Client.builder()
-            .name(client.name())
-            .address(client.address())
-            .build());
+        var updated = clientService.updateClient(id, new Client(id, client.name(), client.address()));
         return ResponseEntity.ok(updated);
     }
 

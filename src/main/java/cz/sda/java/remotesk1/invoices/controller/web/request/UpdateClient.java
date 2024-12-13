@@ -1,6 +1,6 @@
 package cz.sda.java.remotesk1.invoices.controller.web.request;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.*;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
