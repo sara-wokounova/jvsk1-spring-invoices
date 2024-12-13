@@ -63,6 +63,7 @@ class ClientServiceBean implements ClientService {
                 .findById(id)
                 .orElseThrow(() -> new NotFoundException("Client with id " + id + " does not exist"));
         var updated = new Client();
+        updated.setId(id);
         if (StringUtils.hasText(updateClient.getName())) {
             updated.setName(updateClient.getName());
         } else {
