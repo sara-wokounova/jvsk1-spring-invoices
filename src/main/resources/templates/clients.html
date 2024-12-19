@@ -1,34 +1,44 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Clients</title>
-</head>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layouts/default">
+<head th:replace="fragments/header :: head"></head>
 <body>
-<h2>Clients</h2>
-<h3>Add new client</h3>
-<form action="#" th:action="@{/clients/add}" th:object="${client}" method="post">
-    <p>Name: <input type="text" th:field="*{name}" /></p>
-    <p>Address: <input type="text" th:field="*{address}" /></p>
-    <p><button type="submit">Add</button></p>
-</form>
+<div id="menu" th:insert="fragments/menu :: menu"></div>
+<div id="page">
+    <h2 th:text="${pageTitle}"></h2>
+    <h3>Add new client</h3>
+    <form action="#" th:action="@{/clients/add}" th:object="${client}" method="post">
+        <p>Name: <input type="text" th:field="*{name}"/></p>
+        <p>Address: <input type="text" th:field="*{address}"/></p>
+        <p>
+            <button type="submit">Add</button>
+        </p>
+    </form>
 
-<div th:switch="${#lists.size(clients)}">
-  <p th:case="0">No clients</p>
-  <div th:case="*">
-    <table>
-      <thead><tr><th>Name</th><th>Address</th></tr></thead>
-      <tbody>
-        <tr th:each="client : ${clients}">
-          <td th:text="${client.name}">Name</td>
-          <td th:text="${client.address}">Address</td>
-          <td><a th:href="@{/clients/edit/{id}(id=${client.id})}">Edit</a></td>
-          <td><a th:href="@{/clients/delete/{id}(id=${client.id})}">Delete</a></td>
-        </tr>
-    </table>
+    <div th:switch="${#lists.size(clients)}">
+        <p th:case="0">No clients</p>
+        <div th:case="*">
+            <table>
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Address</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="client : ${clients}">
+                    <td th:text="${client.name}">Name</td>
+                    <td th:text="${client.address}">Address</td>
+                    <td><a th:href="@{/clients/edit/{id}(id=${client.id})}">Edit</a></td>
+                    <td><a th:href="@{/clients/delete/{id}(id=${client.id})}">Delete</a></td>
+                </tr>
+            </table>
 
-  </div>
+        </div>
 
+    </div>
 </div>
 </body>
 </html>

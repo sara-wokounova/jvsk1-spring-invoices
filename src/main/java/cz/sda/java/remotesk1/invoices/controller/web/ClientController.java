@@ -25,6 +25,7 @@ class ClientController {
 
     @GetMapping("/")
     String getAllClients(Model model) {
+        setDefaultValues(model);
         model.addAttribute("clients", clientService.getAllClients());
         model.addAttribute("client", new Client());
         return "clients";
@@ -32,24 +33,28 @@ class ClientController {
 
     @PostMapping("/add")
     String addUser(Client client, Model model) {
+        setDefaultValues(model);
         clientService.addClient(client.getName(), client.getAddress());
         return "redirect:/clients/";
     }
 
     @GetMapping("/delete/{id}")
     String addUser(@PathVariable String id, Model model) {
+        setDefaultValues(model);
         clientService.removeClient(id);
         return "redirect:/clients/";
     }
 
     @GetMapping("/edit/{id}")
     String updateUser(@PathVariable String id, Model model) {
+        setDefaultValues(model);
         model.addAttribute("updateClient", clientService.getClient(id));
         return "edit-client";
     }
 
     @PostMapping("/update/{id}")
     String updateUser(@PathVariable String id, @Valid UpdateClient client, BindingResult result, Model model) {
+        setDefaultValues(model);
         if (result.hasErrors()) {
             client.setId(id);
             model.addAttribute("updateClient", client);
@@ -58,6 +63,10 @@ class ClientController {
 
         clientService.updateClient(client.getId(), new Client(client.getId(), client.getName(), client.getAddress()));
         return "redirect:/clients/";
+    }
+
+    private void setDefaultValues(Model model) {
+        model.addAttribute("pageTitle", "Client");
     }
 
 }

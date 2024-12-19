@@ -1,20 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Orders</title>
-</head>
+<head th:replace="fragments/header :: head"></head>
 <body>
-<h2>Orders</h2>
-<h3>Edit new order</h3>
-<form action="#" th:action="@{/orders/update}" th:object="${updateOrder}" method="post">
-    <input type="hidden" th:field="*{orderId}" />
-    <p>Client: <select th:field="*{clientId}">
-        <option th:each="client : ${clientList}" th:value="${client.id}" th:text="${client.name}"></option>
-    </select> </p>
-    <p>Date: <input type="text" th:field="*{date}" /></p>
-    <p><button type="submit">Update</button></p>
-</form>
+<div id="menu" th:insert="fragments/menu :: menu"></div>
+<div id="page">
+    <h2 th:text="${pageTitle}"></h2>
+    <h3>Edit new order</h3>
+    <form action="#" th:action="@{/orders/update}" th:object="${updateOrder}" method="post">
+        <input type="hidden" th:field="*{orderId}"/>
+        <p>Client: <select th:field="*{clientId}">
+            <option th:each="client : ${clientList}" th:value="${client.id}" th:text="${client.name}"></option>
+        </select></p>
+        <p>Date: <input type="text" th:field="*{date}"/></p>
+        <p>
+            <button type="submit">Update</button>
+        </p>
+    </form>
 
+    <h3>Add New Order Item</h3>
+    <form action="#" th:action="@{/orders/{orderId}/items/add(orderId=${updateOrder.orderId})}" th:object="${createOrderItem}" method="post">
+        <p>Product: <select th:field="*{productId}">
+            <option th:each="product : ${productList}" th:value="${product.id}" th:text="${product.name}"></option>
+        </select></p>
+        <p>Amount: <input type="text" th:field="*{amount}"/></p>
+        <p>
+            <button type="submit">Add</button>
+        </p>
+    </form>
+
+    <div th:switch="${#lists.size(orderItems)}">
+        <p th:case="0">No order items</p>
+        <div th:case="*">
+            <table>
+                <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Amount</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="item : ${orderItems}">
+                    <td th:text="${item.product.name}">Name</td>
+                    <td th:text="${item.amount}">Amount</td>
+                    <td><a th:href="@{/orders/{orderId}/items/{itemId}/delete(orderId=${updateOrder.orderId},itemId=${item.id})}">Delete</a></td>
+                </tr>
+            </table>
+
+        </div>
+    </div>
+</div>
 </body>
 </html>

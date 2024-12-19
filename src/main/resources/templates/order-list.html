@@ -1,36 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Orders</title>
-</head>
+<head th:replace="fragments/header :: head"></head>
 <body>
-<h2>Orders</h2>
-<h3>Add new order</h3>
-<form action="#" th:action="@{/orders/add}" th:object="${createOrder}" method="post">
-    <p>Client: <select th:field="*{clientId}">
-        <option th:each="client : ${clientList}" th:value="${client.id}" th:text="${client.name}"></option>
-    </select> </p>
-    <p>Date: <input type="text" th:field="*{date}" /></p>
-    <p><button type="submit">Add</button></p>
-</form>
+<div id="menu" th:insert="fragments/menu :: menu"></div>
+<div id="page">
+    <h2 th:text="${pageTitle}"></h2>
+    <h3>Add new order</h3>
+    <form action="#" th:action="@{/orders/add}" th:object="${createOrder}" method="post">
+        <p>Client: <select th:field="*{clientId}">
+            <option th:each="client : ${clientList}" th:value="${client.id}" th:text="${client.name}"></option>
+        </select></p>
+        <p>Date: <input type="text" th:field="*{date}"/></p>
+        <p>
+            <button type="submit">Add</button>
+        </p>
+    </form>
 
-<div th:switch="${#lists.size(orders)}">
-  <p th:case="0">No orders</p>
-  <div th:case="*">
-    <table>
-      <thead><tr><th>Name</th><th>Price</th></tr></thead>
-      <tbody>
-        <tr th:each="order : ${orders}">
-          <td th:text="${order.client.name}">Name</td>
-          <td th:text="${order.date}">Date</td>
-          <td><a th:href="@{/orders/edit/{id}(id=${order.id})}">Edit</a></td>
-          <td><a th:href="@{/orders/delete/{id}(id=${order.id})}">Delete</a></td>
-        </tr>
-    </table>
+    <div th:switch="${#lists.size(orders)}">
+        <p th:case="0">No orders</p>
+        <div th:case="*">
+            <table>
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Price</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="order : ${orders}">
+                    <td th:text="${order.client.name}">Name</td>
+                    <td th:text="${order.date}">Date</td>
+                    <td><a th:href="@{/orders/edit/{id}(id=${order.id})}">Edit</a></td>
+                    <td><a th:href="@{/orders/delete/{id}(id=${order.id})}">Delete</a></td>
+                </tr>
+            </table>
 
-  </div>
-
+        </div>
+    </div>
 </div>
 </body>
 </html>

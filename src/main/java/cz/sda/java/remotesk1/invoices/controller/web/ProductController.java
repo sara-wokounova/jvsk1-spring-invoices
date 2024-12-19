@@ -25,6 +25,7 @@ class ProductController {
 
     @GetMapping("/")
     public String getAllProducts(Model model) {
+        setDefaultValues(model);
         model.addAttribute("products", productService.getAllProducts());
         model.addAttribute("product", new Product());
         return "product-list";
@@ -32,6 +33,7 @@ class ProductController {
 
     @GetMapping("/edit/{id}")
     public String getProductById(@PathVariable("id") String id, Model model) {
+        setDefaultValues(model);
         model.addAttribute("product", productService.getProduct(id));
         return "product-edit";
     }
@@ -52,5 +54,9 @@ class ProductController {
     public String deleteProduct(@PathVariable("id") String id, Model model) {
         productService.removeProduct(id);
         return "redirect:/products/";
+    }
+
+    private void setDefaultValues(Model model) {
+        model.addAttribute("pageTitle", "Product");
     }
 }
