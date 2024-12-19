@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Orders</title>
+</head>
+<body>
+<h2>Orders</h2>
+<h3>Edit new order</h3>
+<form action="#" th:action="@{/orders/update}" th:object="${updateOrder}" method="post">
+    <input type="hidden" th:field="*{orderId}" />
+    <p>Client: <select th:field="*{clientId}">
+        <option th:each="client : ${clientList}" th:value="${client.id}" th:text="${client.name}"></option>
+    </select> </p>
+    <p>Date: <input type="text" th:field="*{date}" /></p>
+    <p><button type="submit">Update</button></p>
+</form>
+
+</body>
+</html>

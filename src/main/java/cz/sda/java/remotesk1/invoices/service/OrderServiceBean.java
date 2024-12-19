@@ -9,6 +9,7 @@ import cz.sda.java.remotesk1.invoices.repository.OrderRepository;
 import cz.sda.java.remotesk1.invoices.repository.ProductRepository;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.StreamSupport;
 
+@Service
 class OrderServiceBean implements OrderService {
 
     private final OrderRepository orderRepository;
