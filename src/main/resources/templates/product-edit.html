@@ -1,18 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-<head th:replace="fragments/header :: head"></head>
+<head th:replace="~{fragments/header :: head}"></head>
 <body>
-<div id="menu" th:insert="fragments/menu :: menu"></div>
-<div id="page">
-    <h2 th:text="${pageTitle}"></h2>
+<div id="menu" th:insert="~{fragments/menu :: menu}"></div>
+<div id="page" class="container mt-4">
+    <h2 th:text="${pageTitle}" class="mb-4"></h2>
     <h3>Edit new product</h3>
-    <form action="#" th:action="@{/products/update}" th:object="${product}" method="post">
+    <form action="#" th:action="@{/products/update}" th:object="${product}" method="post" class="mb-4">
         <input type="hidden" th:field="*{id}"/>
-        <p>Name: <input type="text" th:field="*{name}"/></p>
-        <p>Address: <input type="text" th:field="*{price}"/></p>
-        <p>
-            <button type="submit">Update</button>
-        </p>
+        <div class="mb-3">
+            <label for="name" class="form-label">Name:</label>
+            <input type="text" th:field="*{name}" id="name" class="form-control"/>
+        </div>
+        <div class="mb-3">
+            <label for="price" class="form-label">Price:</label>
+            <input type="text" th:field="*{price}" id="price" class="form-control"/>
+        </div>
+        <button type="submit" class="btn btn-primary">Update</button>
     </form>
 </div>
 </body>

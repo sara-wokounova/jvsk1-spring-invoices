@@ -1,10 +1,11 @@
-<html>
-<head th:replace="fragments/header :: head"></head>
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="~{fragments/header :: head}"></head>
 <body>
-<div id="menu" th:insert="fragments/menu :: menu"></div>
-<div id="page">
-    <h2 th:text="${pageTitle}"></h2>
-    <p th:text="${info}"></p>
+<div id="menu" th:insert="~{fragments/menu :: menu}"></div>
+<div id="page" class="container mt-4">
+    <h2 th:text="${pageTitle}" class="mb-4"></h2>
+    <p th:text="${info}" class="lead"></p>
 </div>
 </body>
 </html>
