@@ -83,4 +83,9 @@ class ClientServiceBean implements ClientService {
     public List<Client> getAllClients() {
         return StreamSupport.stream(clientRepository.findAll().spliterator(), false).toList();
     }
+
+    @Override
+    public List<Client> findClientsByName(String name) {
+        return clientRepository.findByName(name);
+    }
 }

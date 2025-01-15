@@ -37,6 +37,11 @@ class ClientApi {
         return clientService.getAllClients();
     }
 
+    @GetMapping("/!find")
+    List<Client> findClients(@RequestParam("name") String name) {
+        return clientService.findClientsByName(name);
+    }
+
     @GetMapping("/{id}")
     Client getClient(@NonNull @PathVariable("id") String id) {
         return clientService.getClient(id);
